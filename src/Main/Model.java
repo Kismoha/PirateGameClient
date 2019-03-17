@@ -100,6 +100,7 @@ public class Model {
     public void readFromServer() {
         //Ezt a Thread-et ki kéne vinni egy class-ba
         (new Thread() {
+            @Override
             public void run() {
                 String message = "";
                 try {
@@ -124,10 +125,7 @@ public class Model {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                ShipControlls sp = gamePane.getShipControlls();
-                                sp.resetControlls();
-                                sp.setDisable(false);
-                                gamePane.getEndTurn().setDisable(false);
+                                gamePane.animateTurn(messageParts[1]);
                             }
                         });
                         break;
@@ -151,7 +149,6 @@ public class Model {
                 System.out.println(minGame.toString());
                 gamePane.setupTiles(minGame);
                 gamePane.setupShips(minGame);
-                startingPane.getStartBTN().setDisable(false);
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {

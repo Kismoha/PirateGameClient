@@ -8,6 +8,11 @@ package GUI;
 import Utils.Enums.TileType;
 import Utils.MinGame;
 import Utils.Ship.ShipShape;
+import javafx.animation.ParallelTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.Transition;
+import javafx.animation.TranslateTransition;
+import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
@@ -17,22 +22,25 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+
+import static GUI.Tile.TILE_SIZE;
+import javafx.util.Duration;
+
 /**
  *
  * @author kismo
  */
 public class GamePane extends VBox {
-    
+
     private ScrollPane gameTable;
     private StackPane gameState;
     private Pane tiles;
     private Pane ships;
     private ShipControlls shipControlls;
     private Button endTurn;
-    
+
     private ShipShape shipOne;
     private ShipShape shipTwo;
-    
 
     public GamePane(int windowWidth, int windowHeight) {
         gameTable = new ScrollPane();
@@ -50,22 +58,82 @@ public class GamePane extends VBox {
         setupControlls();
         this.setAlignment(Pos.CENTER);
     }
-    
+
+    public void animateTurn(String message) {
+        /*
+        message: MOVANI.X.Y;LACTANI;RACTANI-MOVANI.X.Y;LACTANI;RACTANI-REPEAT/REPEAT
+         */
+        ParallelTransition[] mainAnimationElements = new ParallelTransition[4];
+        calcSegmentAnimations(mainAnimationElements, message);
+        SequentialTransition mainAnimation = new SequentialTransition(
+                mainAnimationElements[0],
+                mainAnimationElements[1],
+                mainAnimationElements[2],
+                mainAnimationElements[3]
+        );
+        mainAnimation.setOnFinished((ActionEvent actionEvent) -> {
+            shipControlls.resetControlls();
+            shipControlls.setDisable(false);
+            endTurn.setDisable(false);
+        });
+        mainAnimation.play();
+    }
+
+    private void calcSegmentAnimations(ParallelTransition[] mainAnimation,
+            String message) {
+        String[] splitByShip = message.split("/");
+        String[] shipOneParts = splitByShip[0].split("-");
+        String[] shipTwoParts = splitByShip[1].split("-");
+        mainAnimation[0] = calcASegmentAnimation(shipOneParts[0],
+                shipTwoParts[0]);
+        mainAnimation[1] = calcASegmentAnimation(shipOneParts[1],
+                shipTwoParts[1]);
+        mainAnimation[2] = calcASegmentAnimation(shipOneParts[2],
+                shipTwoParts[2]);
+        mainAnimation[3] = calcASegmentAnimation(shipOneParts[3],
+                shipTwoParts[3]);
+    }
+
+    private ParallelTransition calcASegmentAnimation(String shipOneSegment,
+            String shipTwoSegment) {
+        ParallelTransition shipSegmentAnimation = new ParallelTransition(
+                calcAShipSegmentAnimation(shipOne, shipOneSegment),
+                calcAShipSegmentAnimation(shipTwo, shipTwoSegment)
+        );
+        return shipSegmentAnimation;
+    }
+
+    private SequentialTransition calcAShipSegmentAnimation(ShipShape ship, String animations) {
+        String[] parts = animations.split(";");
+        String[] movement = parts[0].split(",");
+        TranslateTransition move = new TranslateTransition();
+        move.setNode(ship.getShip());
+        move.setToX(Integer.parseInt(movement[1]) * TILE_SIZE);
+        move.setToY(Integer.parseInt(movement[2]) * TILE_SIZE);
+        move.setDuration(Duration.millis(1500));
+        move.setOnFinished((ActionEvent actionEvent) -> {
+            ship.setPosX((int) move.getToX());
+            ship.setPosY((int) move.getToY());
+        });
+        SequentialTransition shipSegmentAnimation = new SequentialTransition(move);
+        return shipSegmentAnimation;
+    }
+
     public void setupShips(MinGame minGame) {
         shipOne = new ShipShape(GUI.Tile.TILE_SIZE, GUI.Tile.TILE_SIZE, Color.YELLOW);
         shipOne.setPosX(minGame.getpOneCurrentPosX());
         shipOne.setPosY(minGame.getpOneCurrentPosY());
         shipOne.relocateShip();
-        
+
         shipTwo = new ShipShape(GUI.Tile.TILE_SIZE, GUI.Tile.TILE_SIZE, Color.YELLOW);
         shipTwo.setPosX(minGame.getpTwoCurrentPosX());
         shipTwo.setPosY(minGame.getpTwoCurrentPosY());
         shipTwo.relocateShip();
-        
+
         ships.getChildren().add(shipOne.getShip());
         ships.getChildren().add(shipTwo.getShip());
     }
-    
+
     public void setupTiles(MinGame minGame) {
         //init
         TileType[][] map = minGame.getMap();
@@ -77,43 +145,43 @@ public class GamePane extends VBox {
             }
         }
     }
-    
+
     private void setupControlls() {
         shipControlls = new ShipControlls();
         endTurn = new Button("End Turn");
         this.getChildren().add(new HBox(shipControlls, endTurn));
     }
-    
+
     public ScrollPane getGameTable() {
         return gameTable;
     }
-    
+
     public void setGameTable(ScrollPane gameTable) {
         this.gameTable = gameTable;
     }
-    
+
     public ShipControlls getShipControlls() {
         return shipControlls;
     }
-    
+
     public void setShipControlls(ShipControlls controlls) {
         this.shipControlls = controlls;
     }
-    
+
     public Pane getTiles() {
         return tiles;
     }
-    
+
     public void setTiles(Pane tiles) {
         this.tiles = tiles;
     }
-    
+
     public Button getEndTurn() {
         return endTurn;
     }
-    
+
     public void setEndTurn(Button endTurn) {
         this.endTurn = endTurn;
     }
-    
+
 }

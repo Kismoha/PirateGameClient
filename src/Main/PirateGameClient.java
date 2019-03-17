@@ -9,20 +9,15 @@ import Control.ShipControllsController;
 import Control.StartingPaneController;
 import GUI.GamePane;
 import GUI.StartingPane;
-import Utils.Enums.MessageType;
-import Utils.MinGame;
 import java.net.Socket;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import static Utils.ScreenInfo.windowHeight;
 import static Utils.ScreenInfo.windowWidth;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 
 /**
  *
