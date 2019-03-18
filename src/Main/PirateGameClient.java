@@ -9,20 +9,15 @@ import Control.ShipControllsController;
 import Control.StartingPaneController;
 import GUI.GamePane;
 import GUI.StartingPane;
-import Utils.Enums.MessageType;
-import Utils.MinGame;
 import java.net.Socket;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import static Utils.ScreenInfo.windowHeight;
 import static Utils.ScreenInfo.windowWidth;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.application.Platform;
 
 /**
  *
@@ -44,7 +39,7 @@ public class PirateGameClient extends Application {
     //Ship controlls controller
     private ShipControllsController SCControl;
     
-    private Model model;
+    private Communication model;
 
     @Override
     public void start(Stage primaryStage) {
@@ -71,7 +66,7 @@ public class PirateGameClient extends Application {
         startingScene = new Scene(startingPane, StartingPane.START_PAGE_WIDTH, StartingPane.START_PAGE_HEIGHT);
         //setting up startingPane UI controller
         
-        model = new Model(me,gamePane,startingPane,primaryStage);
+        model = new Communication(me,gamePane,startingPane,primaryStage);
         //Setting up startingPane controller
         SPControl = new StartingPaneController(model, primaryStage, startingPane, gameScene);
         //setting up ship controlls controller

@@ -13,7 +13,7 @@ import java.net.Socket;
  * @author kismo
  */
 public class MinGame {
-    
+
     private int MAP_HEIGHT = 50;
     private int MAP_WIDTH = 50;
 
@@ -22,18 +22,15 @@ public class MinGame {
     private int pOneCurrentPosX;
     private int pOneCurrentPosY;
 
-    private int pOneOldPosX;
-    private int pOneOldPosY;
-
     private int pTwoCurrentPosX;
     private int pTwoCurrentPosY;
 
-    private int pTwoOldPosX;
-    private int pTwoOldPosY;
-    
+    private String pOneDir;
+    private String pTwoDir;
+
     private Socket winner;
 
-    public MinGame(String game){
+    public MinGame(String game) {
         String[] mainSplit = game.split("-");
         String[] mapSizes = mainSplit[0].split(";");
         MAP_HEIGHT = Integer.parseInt(mapSizes[0]);
@@ -42,23 +39,24 @@ public class MinGame {
         String[] mapString = mainSplit[1].split(";");
         int i = 0;
         int j = 0;
-        while(i < MAP_HEIGHT){
-            map[i][j] = TileType.valueOf(mapString[i*MAP_WIDTH+j]);
-            if(j == MAP_WIDTH-1){
+        while (i < MAP_HEIGHT) {
+            map[i][j] = TileType.valueOf(mapString[i * MAP_WIDTH + j]);
+            if (j == MAP_WIDTH - 1) {
                 j = 0;
                 i++;
-            }else{
+            } else {
                 j++;
             }
         }
         String[] positions = mainSplit[2].split(";");
-        System.out.println(positions[0]+positions[1]+positions[2]+positions[3]);
         pOneCurrentPosX = Integer.parseInt(positions[0]);
         pOneCurrentPosY = Integer.parseInt(positions[1]);
-        pTwoCurrentPosX = Integer.parseInt(positions[2]);
-        pTwoCurrentPosY = Integer.parseInt(positions[3]);
+        pOneDir = positions[2];
+        pTwoCurrentPosX = Integer.parseInt(positions[3]);
+        pTwoCurrentPosY = Integer.parseInt(positions[4]);
+        pTwoDir = positions[5];
     }
-    
+
     //Getters and Setters
     public TileType[][] getMap() {
         return map;
@@ -84,22 +82,6 @@ public class MinGame {
         this.pOneCurrentPosY = pOneCurrentPosY;
     }
 
-    public int getpOneOldPosX() {
-        return pOneOldPosX;
-    }
-
-    public void setpOneOldPosX(int pOneOldPosX) {
-        this.pOneOldPosX = pOneOldPosX;
-    }
-
-    public int getpOneOldPosY() {
-        return pOneOldPosY;
-    }
-
-    public void setpOneOldPosY(int pOneOldPosY) {
-        this.pOneOldPosY = pOneOldPosY;
-    }
-
     public int getpTwoCurrentPosX() {
         return pTwoCurrentPosX;
     }
@@ -114,22 +96,6 @@ public class MinGame {
 
     public void setpTwoCurrentPosY(int pTwoCurrentPosY) {
         this.pTwoCurrentPosY = pTwoCurrentPosY;
-    }
-
-    public int getpTwoOldPosX() {
-        return pTwoOldPosX;
-    }
-
-    public void setpTwoOldPosX(int pTwoOldPosX) {
-        this.pTwoOldPosX = pTwoOldPosX;
-    }
-
-    public int getpTwoOldPosY() {
-        return pTwoOldPosY;
-    }
-
-    public void setpTwoOldPosY(int pTwoOldPosY) {
-        this.pTwoOldPosY = pTwoOldPosY;
     }
 
     public int getMAP_HEIGHT() {
@@ -154,6 +120,22 @@ public class MinGame {
 
     public void setWinner(Socket winner) {
         this.winner = winner;
+    }
+
+    public String getPOneDir() {
+        return pOneDir;
+    }
+
+    public void setPOneDir(String POneDir) {
+        this.pOneDir = POneDir;
+    }
+
+    public String getPTwoDir() {
+        return pTwoDir;
+    }
+
+    public void setPTwoDir(String PTwoDir) {
+        this.pTwoDir = PTwoDir;
     }
 
 }

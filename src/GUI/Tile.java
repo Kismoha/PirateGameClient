@@ -15,11 +15,12 @@ import javafx.scene.shape.Rectangle;
  */
 public class Tile extends Rectangle{
     
-    public static final int TILE_SIZE = 75;
+    public static final int TILE_SIZE = 35;
     
     public Tile(TileType type, int x, int y){
         this.setHeight(TILE_SIZE);
         this.setWidth(TILE_SIZE);
+        this.setStroke(Color.GRAY);
         this.relocate(x * TILE_SIZE, y * TILE_SIZE);
         
         switch(type){

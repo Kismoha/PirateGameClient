@@ -16,7 +16,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.Socket;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
@@ -29,7 +28,7 @@ import javafx.stage.Stage;
  *
  * @author kismo
  */
-public class Model {
+public class Communication {
 
     private final Socket client;
     private final GamePane gamePane;
@@ -38,7 +37,7 @@ public class Model {
     private final BufferedReader in;
     private final PrintWriter out;
 
-    public Model(Socket client, GamePane gamePane, StartingPane startingPane, Stage stage) {
+    public Communication(Socket client, GamePane gamePane, StartingPane startingPane, Stage stage) {
         this.client = client;
         this.gamePane = gamePane;
         this.startingPane = startingPane;
@@ -100,6 +99,7 @@ public class Model {
     public void readFromServer() {
         //Ezt a Thread-et ki kéne vinni egy class-ba
         (new Thread() {
+            @Override
             public void run() {
                 String message = "";
                 try {
@@ -124,10 +124,7 @@ public class Model {
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
-                                ShipControlls sp = gamePane.getShipControlls();
-                                sp.resetControlls();
-                                sp.setDisable(false);
-                                gamePane.getEndTurn().setDisable(false);
+                                gamePane.animateTurn(messageParts[1]);
                             }
                         });
                         break;
@@ -151,7 +148,6 @@ public class Model {
                 System.out.println(minGame.toString());
                 gamePane.setupTiles(minGame);
                 gamePane.setupShips(minGame);
-                startingPane.getStartBTN().setDisable(false);
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
