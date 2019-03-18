@@ -6,7 +6,7 @@
 package Control;
 
 import GUI.StartingPane;
-import Main.Model;
+import Main.Communication;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -19,7 +19,7 @@ import javafx.stage.Stage;
  */
 public class StartingPaneController {
 
-    public StartingPaneController(Model model, Stage primaryStage, StartingPane startingPane, Scene gameScene) {
+    public StartingPaneController(Communication model, Stage primaryStage, StartingPane startingPane, Scene gameScene) {
         //Game start mechanic
         startingPane.getStartBTN().setOnAction((ActionEvent actionEvent) -> {
             startingPane.getStartBTN().setDisable(true);

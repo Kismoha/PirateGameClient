@@ -7,7 +7,7 @@ package Control;
 
 import GUI.GamePane;
 import GUI.ShipControlls;
-import Main.Model;
+import Main.Communication;
 import Utils.Enums.MovementType;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,7 +22,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class ShipControllsController {
 
-    public ShipControllsController(Model model,GamePane gamePane) {
+    public ShipControllsController(Communication model,GamePane gamePane) {
         ArrayList<Rectangle> movementSlots = gamePane.getShipControlls().getMovementSlots();
         for (Iterator<Rectangle> it = movementSlots.iterator(); it.hasNext();) {
             Rectangle rect = it.next();

@@ -24,6 +24,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 import static GUI.Tile.TILE_SIZE;
+import Utils.AnimationGenerator;
+import Utils.Enums.MovementType;
+import javafx.animation.RotateTransition;
 import javafx.util.Duration;
 
 /**
@@ -106,29 +109,28 @@ public class GamePane extends VBox {
     private SequentialTransition calcAShipSegmentAnimation(ShipShape ship, String animations) {
         String[] parts = animations.split(";");
         String[] movement = parts[0].split(",");
-        TranslateTransition move = new TranslateTransition();
-        move.setNode(ship.getShip());
-        move.setToX(Integer.parseInt(movement[1]) * TILE_SIZE);
-        move.setToY(Integer.parseInt(movement[2]) * TILE_SIZE);
-        move.setDuration(Duration.millis(1500));
-        move.setOnFinished((ActionEvent actionEvent) -> {
-            ship.setPosX((int) move.getToX());
-            ship.setPosY((int) move.getToY());
-        });
-        SequentialTransition shipSegmentAnimation = new SequentialTransition(move);
+
+        SequentialTransition shipSegmentAnimation
+                = new SequentialTransition(
+                        new AnimationGenerator().movementAnimation(
+                                MovementType.valueOf(movement[0]),
+                                ship,
+                                Integer.parseInt(movement[1]),
+                                Integer.parseInt(movement[2]))
+                );
+        ship.setPosX((int) Integer.parseInt(movement[1]));
+        ship.setPosY((int) Integer.parseInt(movement[2]));
         return shipSegmentAnimation;
     }
 
     public void setupShips(MinGame minGame) {
-        shipOne = new ShipShape(GUI.Tile.TILE_SIZE, GUI.Tile.TILE_SIZE, Color.YELLOW);
-        shipOne.setPosX(minGame.getpOneCurrentPosX());
-        shipOne.setPosY(minGame.getpOneCurrentPosY());
-        shipOne.relocateShip();
+        shipOne = new ShipShape(minGame.getpOneCurrentPosX(),
+                minGame.getpOneCurrentPosY(), Color.YELLOW,
+                minGame.getPOneDir());
 
-        shipTwo = new ShipShape(GUI.Tile.TILE_SIZE, GUI.Tile.TILE_SIZE, Color.YELLOW);
-        shipTwo.setPosX(minGame.getpTwoCurrentPosX());
-        shipTwo.setPosY(minGame.getpTwoCurrentPosY());
-        shipTwo.relocateShip();
+        shipTwo = new ShipShape(minGame.getpTwoCurrentPosX(),
+                minGame.getpTwoCurrentPosY(), Color.YELLOW,
+                minGame.getPTwoDir());
 
         ships.getChildren().add(shipOne.getShip());
         ships.getChildren().add(shipTwo.getShip());

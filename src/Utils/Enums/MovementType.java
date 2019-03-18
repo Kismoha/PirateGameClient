@@ -10,5 +10,8 @@ package Utils.Enums;
  * @author kismo
  */
 public enum MovementType {
-    NONE,FORWARD,LEFT,RIGHT
+    FORWARD,FORWARD_CRASH,
+    RIGHT,RIGHT_MID_CRASH,RIGHT_CRASH,
+    LEFT,LEFT_MID_CRASH,LEFT_CRASH,
+    NONE
 }

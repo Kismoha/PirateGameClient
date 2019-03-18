@@ -39,7 +39,7 @@ public class PirateGameClient extends Application {
     //Ship controlls controller
     private ShipControllsController SCControl;
     
-    private Model model;
+    private Communication model;
 
     @Override
     public void start(Stage primaryStage) {
@@ -66,7 +66,7 @@ public class PirateGameClient extends Application {
         startingScene = new Scene(startingPane, StartingPane.START_PAGE_WIDTH, StartingPane.START_PAGE_HEIGHT);
         //setting up startingPane UI controller
         
-        model = new Model(me,gamePane,startingPane,primaryStage);
+        model = new Communication(me,gamePane,startingPane,primaryStage);
         //Setting up startingPane controller
         SPControl = new StartingPaneController(model, primaryStage, startingPane, gameScene);
         //setting up ship controlls controller

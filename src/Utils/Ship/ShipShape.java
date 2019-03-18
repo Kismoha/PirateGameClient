@@ -15,19 +15,76 @@ import static GUI.Tile.TILE_SIZE;
  * @author kismo
  */
 public class ShipShape {
+
     private int posX;
     private int posY;
-    
+
     private Rectangle ship;
-    
-    public ShipShape(int x, int y, Color color){
-        ship = new Rectangle(TILE_SIZE, TILE_SIZE ,color);
+
+    private String dir;
+
+    public ShipShape(int x, int y, Color color, String dir) {
+        this.posX = x;
+        this.posY = y;
+        this.dir = dir;
+        ship = new Rectangle(TILE_SIZE + 1, TILE_SIZE + 1, color);
+        relocateShip();
+        switch (this.dir) {
+            case "SOUTH":
+                ship.setRotate(180);
+                break;
+            case "NORTH":
+                ship.setRotate(0);
+                break;
+            case "WEST":
+                ship.setRotate(270);
+                break;
+            case "EAST":
+                ship.setRotate(90);
+                break;
+        }
     }
 
-    public void relocateShip(){
-        ship.relocate(posX * TILE_SIZE, posY * TILE_SIZE);
+    public void changeDirection(boolean isLeft) {
+        if (isLeft) {
+            switch (this.dir) {
+            case "NORTH":
+                this.dir = "WEST";
+                break;
+            case "SOUTH":
+                this.dir = "EAST";
+                break;
+            case "EAST":
+                this.dir = "NORTH";
+                break;
+            case "WEST":
+                this.dir = "SOUTH";
+                break;
+        }
+        } else {
+            switch (this.dir) {
+                case "NORTH":
+                    this.dir = "EAST";
+                    break;
+                case "SOUTH":
+                    this.dir ="WEST";
+                    break;
+                case "EAST":
+                    this.dir ="SOUTH";
+                    break;
+                case "WEST":
+                    this.dir ="NORTH";
+                    break;
+            }
+        }
     }
     
+    
+
+    public void relocateShip() {
+        ship.relocate(posX * TILE_SIZE, posY * TILE_SIZE);
+    }
+
     public int getPosX() {
         return posX;
     }
@@ -51,6 +108,14 @@ public class ShipShape {
     public void setShip(Rectangle ship) {
         this.ship = ship;
     }
-    
+
+    public String getDir() {
+        return dir;
+    }
+
+    public void setDir(String dir) {
+        this.dir = dir;
+    }
+
     
 }
