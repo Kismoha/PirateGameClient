@@ -10,12 +10,9 @@ import Utils.MinGame;
 import Utils.Ship.ShipShape;
 import javafx.animation.ParallelTransition;
 import javafx.animation.SequentialTransition;
-import javafx.animation.Transition;
-import javafx.animation.TranslateTransition;
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
@@ -23,11 +20,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
-import static GUI.Tile.TILE_SIZE;
 import Utils.AnimationGenerator;
 import Utils.Enums.MovementType;
-import javafx.animation.RotateTransition;
-import javafx.util.Duration;
 
 /**
  *
@@ -50,7 +44,6 @@ public class GamePane extends VBox {
         tiles = new Pane();
         ships = new Pane();
         gameState = new StackPane();
-
         //setting up scrollpane
         gameState.getChildren().addAll(tiles, ships);
         gameTable.setContent(gameState);
@@ -63,9 +56,6 @@ public class GamePane extends VBox {
     }
 
     public void animateTurn(String message) {
-        /*
-        message: MOVANI.X.Y;LACTANI;RACTANI-MOVANI.X.Y;LACTANI;RACTANI-REPEAT/REPEAT
-         */
         ParallelTransition[] mainAnimationElements = new ParallelTransition[4];
         calcSegmentAnimations(mainAnimationElements, message);
         SequentialTransition mainAnimation = new SequentialTransition(
@@ -134,6 +124,9 @@ public class GamePane extends VBox {
 
         ships.getChildren().add(shipOne.getShip());
         ships.getChildren().add(shipTwo.getShip());
+        
+        shipOne.relocateShip();
+        shipTwo.relocateShip();
     }
 
     public void setupTiles(MinGame minGame) {

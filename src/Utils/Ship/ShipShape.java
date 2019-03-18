@@ -9,6 +9,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import static GUI.Tile.TILE_SIZE;
+import javafx.animation.TranslateTransition;
+import javafx.util.Duration;
 
 /**
  *
@@ -28,7 +30,7 @@ public class ShipShape {
         this.posY = y;
         this.dir = dir;
         ship = new Rectangle(TILE_SIZE + 1, TILE_SIZE + 1, color);
-        relocateShip();
+        //relocateShip();
         switch (this.dir) {
             case "SOUTH":
                 ship.setRotate(180);
@@ -82,7 +84,13 @@ public class ShipShape {
     
 
     public void relocateShip() {
-        ship.relocate(posX * TILE_SIZE, posY * TILE_SIZE);
+        //#mágia hogy működjön
+        TranslateTransition asd = new TranslateTransition(Duration.millis(1));
+        asd.setNode(ship);
+        asd.setToX(posX * TILE_SIZE);
+        asd.setToY(posY * TILE_SIZE);
+        asd.play();
+        //geci --> ship.relocate(posX * TILE_SIZE, posY * TILE_SIZE);
     }
 
     public int getPosX() {
