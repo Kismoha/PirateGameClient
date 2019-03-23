@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 
 import Utils.AnimationGenerator;
 import Utils.Enums.MovementType;
+import javafx.animation.Transition;
 
 /**
  *
@@ -96,19 +97,37 @@ public class GamePane extends VBox {
     }
 
     private SequentialTransition calcAShipSegmentAnimation(ShipShape ship, String animations) {
-        String[] parts = animations.split(";");
-        String[] movement = parts[0].split(",");
+        String[] segments = animations.split(";"); // movements,current move,action,action
+        String[] movements = segments[0].split("="); //self move,current move
+        String[] movement = movements[0].split(","); // move, coord, coord
+        String[] current = movements[1].split(","); //current, coord coord
 
-        SequentialTransition shipSegmentAnimation
-                = new SequentialTransition(
-                        new AnimationGenerator().movementAnimation(
-                                MovementType.valueOf(movement[0]),
-                                ship,
-                                Integer.parseInt(movement[1]),
-                                Integer.parseInt(movement[2]))
-                );
+        ParallelTransition playerMove = new AnimationGenerator().movementAnimation(
+                MovementType.valueOf(movement[0]),
+                ship,
+                Integer.parseInt(movement[1]),
+                Integer.parseInt(movement[2])
+        );
+
         ship.setPosX((int) Integer.parseInt(movement[1]));
         ship.setPosY((int) Integer.parseInt(movement[2]));
+
+        Transition currentMove = new AnimationGenerator().currentAnimation(
+                MovementType.valueOf(current[0]),
+                ship,
+                Integer.parseInt(current[1]),
+                Integer.parseInt(current[2])
+        );
+
+        ship.setPosX((int) Integer.parseInt(current[1]));
+        ship.setPosY((int) Integer.parseInt(current[2]));
+        
+        SequentialTransition shipSegmentAnimation // movement(seq), actions(par)
+                = new SequentialTransition(
+                        playerMove,
+                        currentMove
+                );
+
         return shipSegmentAnimation;
     }
 
@@ -123,7 +142,7 @@ public class GamePane extends VBox {
 
         ships.getChildren().add(shipOne.getShip());
         ships.getChildren().add(shipTwo.getShip());
-        
+
         shipOne.relocateShip();
         shipTwo.relocateShip();
     }

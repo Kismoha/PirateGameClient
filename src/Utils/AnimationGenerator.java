@@ -11,11 +11,11 @@ import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
-import javafx.animation.Transition;
 import javafx.scene.shape.Path;
 import javafx.util.Duration;
 
 import static GUI.Tile.TILE_SIZE;
+import javafx.animation.Transition;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
@@ -74,6 +74,8 @@ public class AnimationGenerator {
         movement.getChildren().add(rotate == null
                 ? new PauseTransition(Duration.millis(1500))
                 : rotate);
+        ship.setPosX(toX);
+        ship.setPosY(toY);
         return movement;
     }
 
@@ -96,7 +98,7 @@ public class AnimationGenerator {
         if (direction.equals("RIGHT")) {
             arc.setSweepFlag(true);
         }
-        ship.changeDirection(direction.equals("LEFT") ? true : false);
+        ship.changeDirection(direction.equals("LEFT"));
         path.getElements().addAll(
                 new MoveTo((ship.getPosX() * TILE_SIZE) + (TILE_SIZE / 2), (ship.getPosY() * TILE_SIZE) + (TILE_SIZE / 2)),
                 arc
@@ -113,6 +115,26 @@ public class AnimationGenerator {
             rotate.setByAngle(-90);
         }
         return rotate;
+    }
+
+    public Transition currentAnimation(MovementType type, ShipShape ship, int toX, int toY) {
+        if (type == MovementType.NONE) {
+            return new PauseTransition(Duration.millis(1500));
+        } else {
+            PathTransition move = new PathTransition();
+            move.setAutoReverse(false);
+            move.setDuration(Duration.millis(1500));
+            move.setNode(ship.getShip());
+
+            Path path = generateForwardPath(ship, toX, toY);
+
+            move.setPath(path);
+
+            ship.setPosX(toX);
+            ship.setPosY(toY);
+
+            return move;
+        }
     }
 
 }
