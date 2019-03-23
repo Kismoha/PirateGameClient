@@ -6,8 +6,7 @@
 package Control;
 
 import GUI.GamePane;
-import GUI.ShipControlls;
-import Main.Communication;
+import Utils.Communication;
 import Utils.Enums.MovementType;
 import java.util.ArrayList;
 import java.util.Iterator;

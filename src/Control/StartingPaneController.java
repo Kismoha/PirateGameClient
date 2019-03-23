@@ -6,11 +6,10 @@
 package Control;
 
 import GUI.StartingPane;
-import Main.Communication;
+import Utils.Communication;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
 
 /**

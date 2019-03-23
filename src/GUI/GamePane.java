@@ -7,7 +7,6 @@ package GUI;
 
 import Utils.Enums.TileType;
 import Utils.MinGame;
-import Utils.Ship.ShipShape;
 import javafx.animation.ParallelTransition;
 import javafx.animation.SequentialTransition;
 import javafx.event.ActionEvent;

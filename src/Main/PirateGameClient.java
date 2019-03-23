@@ -5,6 +5,7 @@
  */
 package Main;
 
+import Utils.Communication;
 import Control.ShipControllsController;
 import Control.StartingPaneController;
 import GUI.GamePane;

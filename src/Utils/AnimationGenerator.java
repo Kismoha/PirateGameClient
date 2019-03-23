@@ -6,7 +6,7 @@
 package Utils;
 
 import Utils.Enums.MovementType;
-import Utils.Ship.ShipShape;
+import GUI.ShipShape;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.PauseTransition;
