@@ -144,10 +144,11 @@ public class Communication {
             }
 
             private void firstGameStateHandler(String message) {
-                MinGame minGame = new MinGame(message);
+               String[] parts = message.split("/");
+                MinGame minGame = new MinGame(parts[0]);
                 System.out.println(minGame.toString());
                 gamePane.setupTiles(minGame);
-                gamePane.setupShips(minGame);
+                gamePane.setupShips(minGame,Integer.parseInt(parts[1]));
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {

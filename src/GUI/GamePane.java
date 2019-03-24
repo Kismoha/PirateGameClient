@@ -121,7 +121,7 @@ public class GamePane extends VBox {
 
         ship.setPosX((int) Integer.parseInt(current[1]));
         ship.setPosY((int) Integer.parseInt(current[2]));
-        
+
         SequentialTransition shipSegmentAnimation // movement(seq), actions(par)
                 = new SequentialTransition(
                         playerMove,
@@ -131,14 +131,24 @@ public class GamePane extends VBox {
         return shipSegmentAnimation;
     }
 
-    public void setupShips(MinGame minGame) {
-        shipOne = new ShipShape(minGame.getpOneCurrentPosX(),
-                minGame.getpOneCurrentPosY(), Color.YELLOW,
-                minGame.getPOneDir());
+    public void setupShips(MinGame minGame, int self) {
+        if (self == 1) {
+            shipOne = new ShipShape(minGame.getpOneCurrentPosX(),
+                    minGame.getpOneCurrentPosY(), Color.YELLOW,
+                    minGame.getPOneDir());
 
-        shipTwo = new ShipShape(minGame.getpTwoCurrentPosX(),
-                minGame.getpTwoCurrentPosY(), Color.YELLOW,
-                minGame.getPTwoDir());
+            shipTwo = new ShipShape(minGame.getpTwoCurrentPosX(),
+                    minGame.getpTwoCurrentPosY(), Color.RED,
+                    minGame.getPTwoDir());
+        }else{
+            shipOne = new ShipShape(minGame.getpOneCurrentPosX(),
+                    minGame.getpOneCurrentPosY(), Color.RED,
+                    minGame.getPOneDir());
+
+            shipTwo = new ShipShape(minGame.getpTwoCurrentPosX(),
+                    minGame.getpTwoCurrentPosY(), Color.YELLOW,
+                    minGame.getPTwoDir());
+        }
 
         ships.getChildren().add(shipOne.getShip());
         ships.getChildren().add(shipTwo.getShip());
