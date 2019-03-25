@@ -9,8 +9,8 @@ package Utils.Enums;
  *
  * @author kismo
  */
-public enum AnimationType {
-    FORWARD,FORWARD_CRASH,
-    RIGHT,RIGHT_MID_CRASH,RIGHT_CRASH,
-    LEFT,LEFT_MID_CRASH,LEFT_CRASH
+public enum ActionType {
+    SHOOT, GRAPPLE,
+    SHOOTMISS,SHOOTHIT,
+    NONE
 }

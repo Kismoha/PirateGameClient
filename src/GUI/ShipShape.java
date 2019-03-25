@@ -10,6 +10,9 @@ import javafx.scene.shape.Rectangle;
 
 import static GUI.Tile.TILE_SIZE;
 import javafx.animation.TranslateTransition;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 
 /**
@@ -22,7 +25,13 @@ public class ShipShape {
     private int posY;
 
     private Rectangle ship;
+    
+    private Circle leftShot;
+    private Circle rightShot;
 
+    private Rectangle leftGrapple;
+    private Rectangle rightGrapple;
+    
     private String dir;
 
     public ShipShape(int x, int y, Color color, String dir) {
@@ -30,6 +39,14 @@ public class ShipShape {
         this.posY = y;
         this.dir = dir;
         ship = new Rectangle(TILE_SIZE + 1, TILE_SIZE + 1, color);
+        leftShot = new Circle(5, Color.BLACK);
+        rightShot = new Circle(5, Color.BLACK);
+        leftGrapple = new Rectangle(10,10,Color.GRAY);
+        rightGrapple = new Rectangle(10,10,Color.GRAY);
+        leftShot.setOpacity(0.0);
+        rightShot.setOpacity(0.0);
+        leftGrapple.setOpacity(0.0);
+        rightGrapple.setOpacity(0.0);
         //relocateShip();
         switch (this.dir) {
             case "SOUTH":
@@ -45,8 +62,8 @@ public class ShipShape {
                 ship.setRotate(90);
                 break;
         }
+        relocateShip();
     }
-
     public void changeDirection(boolean isLeft) {
         if (isLeft) {
             switch (this.dir) {
@@ -81,18 +98,39 @@ public class ShipShape {
         }
     }
     
-    
-
-    public void relocateShip() {
-        //#mágia hogy működjön
-        TranslateTransition asd = new TranslateTransition(Duration.millis(1));
-        asd.setNode(ship);
-        asd.setToX(posX * TILE_SIZE);
-        asd.setToY(posY * TILE_SIZE);
-        asd.play();
-        //geci --> ship.relocate(posX * TILE_SIZE, posY * TILE_SIZE);
+    public void addToPane(Pane pane){
+        //pane.getChildren().add(ship);
+        pane.getChildren().add(leftShot);
+        pane.getChildren().add(rightShot);
+        pane.getChildren().add(leftGrapple);
+        pane.getChildren().add(rightGrapple);
     }
 
+    public void relocateShip() {
+        //Hogy ha relocate-et használok, az eltolja a transitionök koordinátáit
+        TranslateTransition temp = new TranslateTransition(Duration.millis(1));
+        temp.setNode(ship);
+        temp.setToX(posX * TILE_SIZE);
+        temp.setToY(posY * TILE_SIZE);
+        temp.play();
+        relocateAssets();
+    }
+    
+    public void relocateAssets(){
+        relocateAsset(leftShot);
+        relocateAsset(rightShot);
+        relocateAsset(leftGrapple);
+        relocateAsset(rightGrapple);
+    }
+
+    private void relocateAsset(Shape target){
+        TranslateTransition temp = new TranslateTransition(Duration.millis(1));
+        temp.setNode(target);
+        temp.setToX(posX * TILE_SIZE);
+        temp.setToY(posY * TILE_SIZE);
+        temp.play();
+    }
+    
     public int getPosX() {
         return posX;
     }
@@ -125,5 +163,21 @@ public class ShipShape {
         this.dir = dir;
     }
 
+    public Circle getLeftShot() {
+        return leftShot;
+    }
+
+    public Circle getRightShot() {
+        return rightShot;
+    }
+
+    public Rectangle getLeftGrapple() {
+        return leftGrapple;
+    }
+
+    public Rectangle getRightGrapple() {
+        return rightGrapple;
+    }
+    
     
 }

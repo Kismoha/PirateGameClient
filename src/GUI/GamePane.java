@@ -20,6 +20,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 import Utils.AnimationGenerator;
+import Utils.Enums.ActionType;
 import Utils.Enums.MovementType;
 import javafx.animation.Transition;
 
@@ -97,7 +98,7 @@ public class GamePane extends VBox {
     }
 
     private SequentialTransition calcAShipSegmentAnimation(ShipShape ship, String animations) {
-        String[] segments = animations.split(";"); // movements,current move,action,action
+        String[] segments = animations.split(";"); // movements,action,action
         String[] movements = segments[0].split("="); //self move,current move
         String[] movement = movements[0].split(","); // move, coord, coord
         String[] current = movements[1].split(","); //current, coord coord
@@ -121,13 +122,20 @@ public class GamePane extends VBox {
 
         ship.setPosX((int) Integer.parseInt(current[1]));
         ship.setPosY((int) Integer.parseInt(current[2]));
+        
+        ship.relocateAssets();
+
+        ParallelTransition actions = new AnimationGenerator().actionAnimations(
+                segments[1], segments[2], ship
+        );
 
         SequentialTransition shipSegmentAnimation // movement(seq), actions(par)
                 = new SequentialTransition(
                         playerMove,
-                        currentMove
+                        currentMove,
+                        actions
                 );
-
+        
         return shipSegmentAnimation;
     }
 
@@ -140,7 +148,7 @@ public class GamePane extends VBox {
             shipTwo = new ShipShape(minGame.getpTwoCurrentPosX(),
                     minGame.getpTwoCurrentPosY(), Color.RED,
                     minGame.getPTwoDir());
-        }else{
+        } else {
             shipOne = new ShipShape(minGame.getpOneCurrentPosX(),
                     minGame.getpOneCurrentPosY(), Color.RED,
                     minGame.getPOneDir());
@@ -150,11 +158,15 @@ public class GamePane extends VBox {
                     minGame.getPTwoDir());
         }
 
+        
+        
         ships.getChildren().add(shipOne.getShip());
         ships.getChildren().add(shipTwo.getShip());
-
-        shipOne.relocateShip();
-        shipTwo.relocateShip();
+        
+        shipOne.addToPane(ships);
+        shipTwo.addToPane(ships);
+        //shipOne.relocateShip();
+        //shipTwo.relocateShip();
     }
 
     public void setupTiles(MinGame minGame) {
