@@ -11,6 +11,8 @@ import Utils.Enums.MovementType;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.event.ActionEvent;
+import javafx.scene.control.RadioButton;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -21,39 +23,54 @@ import javafx.scene.shape.Rectangle;
  */
 public class ShipControllsController {
 
-    public ShipControllsController(Communication model,GamePane gamePane) {
+    public ShipControllsController(Communication model, GamePane gamePane) {
         ArrayList<Rectangle> movementSlots = gamePane.getShipControlls().getMovementSlots();
         for (Iterator<Rectangle> it = movementSlots.iterator(); it.hasNext();) {
             Rectangle rect = it.next();
             rect.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                switch ((MovementType) rect.getUserData()) {
-                    case NONE :
-                        rect.setFill(Color.GREEN);
-                        rect.setUserData(MovementType.FORWARD);
-                        break;
-                    case FORWARD :
-                        rect.setFill(Color.BLUE);
-                        rect.setUserData(MovementType.LEFT);
-                        break;
-                    case LEFT :
-                        rect.setFill(Color.ORANGE);
-                        rect.setUserData(MovementType.RIGHT);
-                        break;
-                    case RIGHT :
-                        rect.setFill(Color.GRAY);
-                        rect.setUserData(MovementType.NONE);
-                        break;
+                MouseButton button = mouseEvent.getButton();
+                if (button == MouseButton.PRIMARY) {
+                    switch ((MovementType) rect.getUserData()) {
+                        case NONE:
+                            rect.setFill(Color.GREEN);
+                            rect.setUserData(MovementType.FORWARD);
+                            break;
+                        case FORWARD:
+                            rect.setFill(Color.BLUE);
+                            rect.setUserData(MovementType.LEFT);
+                            break;
+                        case LEFT:
+                            rect.setFill(Color.ORANGE);
+                            rect.setUserData(MovementType.RIGHT);
+                            break;
+                        case RIGHT:
+                            rect.setFill(Color.GRAY);
+                            rect.setUserData(MovementType.NONE);
+                            break;
+                    }
+                } else if (button == MouseButton.SECONDARY) {
+                    rect.setFill(Color.GRAY);
+                    rect.setUserData(MovementType.NONE);
                 }
+
             });
         }
-        
+
+        for (Iterator<RadioButton> it = gamePane.getShipControlls().getRadioButtons().iterator(); it.hasNext();) {
+            RadioButton button = it.next();
+            button.setOnMouseClicked((MouseEvent mouseEvent) -> {
+               System.out.println(button.isSelected());
+                
+            });
+        }
+
         gamePane.getEndTurn().setOnAction((ActionEvent actionEvent) -> {
             gamePane.getEndTurn().setDisable(true);
             gamePane.getShipControlls().setDisable(true);
             model.writeToServer(model.genTurnMessage());
             model.readFromServer();
         });
-        
+
     }
 
 }

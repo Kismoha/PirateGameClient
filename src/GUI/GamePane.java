@@ -20,15 +20,19 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 import Utils.AnimationGenerator;
-import Utils.Enums.ActionType;
 import Utils.Enums.MovementType;
+import static java.lang.Thread.sleep;
 import javafx.animation.Transition;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 /**
  *
  * @author kismo
  */
 public class GamePane extends VBox {
+
+    public static final int TURN_TIMER = 30;
 
     private ScrollPane gameTable;
     private StackPane gameState;
@@ -37,10 +41,24 @@ public class GamePane extends VBox {
     private ShipControlls shipControlls;
     private Button endTurn;
 
+    private Integer shotCounter;
+    private Integer grappleCounter;
+
+    private TextField shot;
+    private TextField grapple;
+
     private ShipShape shipOne;
     private ShipShape shipTwo;
 
     public GamePane(int windowWidth, int windowHeight) {
+        shotCounter = 6;
+        grappleCounter = 4;
+
+        shot = new TextField(shotCounter.toString());
+        grapple = new TextField(grappleCounter.toString());
+        shot.setPrefWidth(8);
+        grapple.setPrefWidth(8);
+
         gameTable = new ScrollPane();
         tiles = new Pane();
         ships = new Pane();
@@ -56,6 +74,31 @@ public class GamePane extends VBox {
         this.setAlignment(Pos.CENTER);
     }
 
+    public void shot() {
+        shotCounter--;
+        updateCounters();
+    }
+
+    public void shotGain(int ammount) {
+        shotCounter += ammount;
+        updateCounters();
+    }
+
+    public void grapple() {
+        grappleCounter--;
+        updateCounters();
+    }
+
+    public void grappleGain(int ammount) {
+        grappleCounter += ammount;
+        updateCounters();
+    }
+
+    private void updateCounters() {
+        shot.setText(shotCounter.toString());
+        grapple.setText(grappleCounter.toString());
+    }
+
     public void animateTurn(String message) {
         ParallelTransition[] mainAnimationElements = new ParallelTransition[4];
         calcSegmentAnimations(mainAnimationElements, message);
@@ -69,6 +112,17 @@ public class GamePane extends VBox {
             shipControlls.resetControlls();
             shipControlls.setDisable(false);
             endTurn.setDisable(false);
+            (new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        sleep(TURN_TIMER * 1000);
+                    } catch (InterruptedException ex) {
+                        System.out.println("Timer interrupted");
+                    }
+                    endTurn.fire();
+                }
+            }).start();
         });
         mainAnimation.play();
     }
@@ -122,7 +176,7 @@ public class GamePane extends VBox {
 
         ship.setPosX((int) Integer.parseInt(current[1]));
         ship.setPosY((int) Integer.parseInt(current[2]));
-        
+
         ship.relocateAssets();
 
         ParallelTransition actions = new AnimationGenerator().actionAnimations(
@@ -135,7 +189,7 @@ public class GamePane extends VBox {
                         currentMove,
                         actions
                 );
-        
+
         return shipSegmentAnimation;
     }
 
@@ -158,15 +212,23 @@ public class GamePane extends VBox {
                     minGame.getPTwoDir());
         }
 
-        
-        
         ships.getChildren().add(shipOne.getShip());
         ships.getChildren().add(shipTwo.getShip());
-        
+
         shipOne.addToPane(ships);
         shipTwo.addToPane(ships);
-        //shipOne.relocateShip();
-        //shipTwo.relocateShip();
+
+        (new Thread() {
+            @Override
+            public void run() {
+                try {
+                    sleep(TURN_TIMER * 1000);
+                } catch (InterruptedException ex) {
+                    System.out.println("Timer interrupted");
+                }
+                endTurn.fire();
+            }
+        }).start();
     }
 
     public void setupTiles(MinGame minGame) {
@@ -184,7 +246,13 @@ public class GamePane extends VBox {
     private void setupControlls() {
         shipControlls = new ShipControlls();
         endTurn = new Button("End Turn");
-        this.getChildren().add(new HBox(shipControlls, endTurn));
+        VBox actions = new VBox();
+        HBox shots = new HBox();
+        shots.getChildren().addAll(new Text("Lövések:"),shot);
+        HBox grapples = new HBox();
+        grapples.getChildren().addAll(new Text("Csáklyázások:"),grapple);
+        actions.getChildren().addAll(shots,grapples);
+        this.getChildren().add(new HBox(shipControlls, endTurn,actions));
     }
 
     public ScrollPane getGameTable() {

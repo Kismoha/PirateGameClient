@@ -9,6 +9,7 @@ import Utils.Enums.MovementType;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -74,7 +75,7 @@ public class ShipControlls extends GridPane {
             rect.setFill(Color.GRAY);
             rect.setUserData(MovementType.NONE);
         }
-        for(Iterator<RadioButton> it = radioButtons.iterator(); it.hasNext();){
+        for (Iterator<RadioButton> it = radioButtons.iterator(); it.hasNext();) {
             RadioButton rb = it.next();
             rb.setSelected(false);
         }
