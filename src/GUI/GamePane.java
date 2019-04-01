@@ -21,6 +21,7 @@ import javafx.scene.paint.Color;
 
 import Utils.AnimationGenerator;
 import Utils.Enums.MovementType;
+import Utils.Timer;
 import static java.lang.Thread.sleep;
 import javafx.animation.Transition;
 import javafx.scene.control.TextField;
@@ -32,7 +33,7 @@ import javafx.scene.text.Text;
  */
 public class GamePane extends VBox {
 
-    public static final int TURN_TIMER = 30;
+    public static final int TURN_TIMER = 10;
 
     private ScrollPane gameTable;
     private StackPane gameState;
@@ -49,6 +50,8 @@ public class GamePane extends VBox {
 
     private ShipShape shipOne;
     private ShipShape shipTwo;
+    
+    private Timer timer;
 
     public GamePane(int windowWidth, int windowHeight) {
         shotCounter = 6;
@@ -56,8 +59,8 @@ public class GamePane extends VBox {
 
         shot = new TextField(shotCounter.toString());
         grapple = new TextField(grappleCounter.toString());
-        shot.setPrefWidth(8);
-        grapple.setPrefWidth(8);
+        shot.setPrefWidth(50);
+        grapple.setPrefWidth(50);
 
         gameTable = new ScrollPane();
         tiles = new Pane();
@@ -71,7 +74,8 @@ public class GamePane extends VBox {
         this.getChildren().add(gameTable);
         //Controlls
         setupControlls();
-        this.setAlignment(Pos.CENTER);
+        this.setAlignment(Pos.CENTER);     
+        timer = new Timer(endTurn);
     }
 
     public void shot() {
@@ -112,17 +116,8 @@ public class GamePane extends VBox {
             shipControlls.resetControlls();
             shipControlls.setDisable(false);
             endTurn.setDisable(false);
-            (new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        sleep(TURN_TIMER * 1000);
-                    } catch (InterruptedException ex) {
-                        System.out.println("Timer interrupted");
-                    }
-                    endTurn.fire();
-                }
-            }).start();
+            timer = new Timer(endTurn);
+            timer.start();
         });
         mainAnimation.play();
     }
@@ -218,17 +213,7 @@ public class GamePane extends VBox {
         shipOne.addToPane(ships);
         shipTwo.addToPane(ships);
 
-        (new Thread() {
-            @Override
-            public void run() {
-                try {
-                    sleep(TURN_TIMER * 1000);
-                } catch (InterruptedException ex) {
-                    System.out.println("Timer interrupted");
-                }
-                endTurn.fire();
-            }
-        }).start();
+        startTimer();
     }
 
     public void setupTiles(MinGame minGame) {
@@ -253,6 +238,14 @@ public class GamePane extends VBox {
         grapples.getChildren().addAll(new Text("Csáklyázások:"),grapple);
         actions.getChildren().addAll(shots,grapples);
         this.getChildren().add(new HBox(shipControlls, endTurn,actions));
+    }
+    
+    private void stopTimer(){
+        timer.interrupt();
+    }
+    
+    private void startTimer(){
+        timer.start();
     }
 
     public ScrollPane getGameTable() {
@@ -287,4 +280,8 @@ public class GamePane extends VBox {
         this.endTurn = endTurn;
     }
 
+    public Thread getTimer(){
+        return timer;
+    }
+    
 }

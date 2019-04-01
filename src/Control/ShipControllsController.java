@@ -65,6 +65,7 @@ public class ShipControllsController {
         }
 
         gamePane.getEndTurn().setOnAction((ActionEvent actionEvent) -> {
+            gamePane.getTimer().interrupt();
             gamePane.getEndTurn().setDisable(true);
             gamePane.getShipControlls().setDisable(true);
             model.writeToServer(model.genTurnMessage());
