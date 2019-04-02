@@ -22,9 +22,7 @@ import javafx.scene.paint.Color;
 import Utils.AnimationGenerator;
 import Utils.Enums.MovementType;
 import Utils.Timer;
-import static java.lang.Thread.sleep;
 import javafx.animation.Transition;
-import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 
 /**
@@ -33,20 +31,20 @@ import javafx.scene.text.Text;
  */
 public class GamePane extends VBox {
 
-    public static final int TURN_TIMER = 10;
+    public static final int TURN_TIMER = 30;
 
     private ScrollPane gameTable;
-    private StackPane gameState;
+    private final StackPane gameState;
     private Pane tiles;
-    private Pane ships;
+    private final Pane ships;
     private ShipControlls shipControlls;
     private Button endTurn;
 
     private Integer shotCounter;
     private Integer grappleCounter;
 
-    private TextField shot;
-    private TextField grapple;
+    private final Text shot;
+    private final Text grapple;
 
     private ShipShape shipOne;
     private ShipShape shipTwo;
@@ -57,10 +55,8 @@ public class GamePane extends VBox {
         shotCounter = 6;
         grappleCounter = 4;
 
-        shot = new TextField(shotCounter.toString());
-        grapple = new TextField(grappleCounter.toString());
-        shot.setPrefWidth(50);
-        grapple.setPrefWidth(50);
+        shot = new Text(shotCounter.toString());
+        grapple = new Text(grappleCounter.toString());
 
         gameTable = new ScrollPane();
         tiles = new Pane();
@@ -102,8 +98,15 @@ public class GamePane extends VBox {
         shot.setText(shotCounter.toString());
         grapple.setText(grappleCounter.toString());
     }
+    
+    public void setStatuses(String message){
+        String[] parts = message.split(",");
+        shotCounter = Integer.parseInt(parts[1]);
+        grappleCounter = Integer.parseInt(parts[2]);
+        updateCounters();
+    }
 
-    public void animateTurn(String message) {
+    public void animateTurn(String message, String status) {
         ParallelTransition[] mainAnimationElements = new ParallelTransition[4];
         calcSegmentAnimations(mainAnimationElements, message);
         SequentialTransition mainAnimation = new SequentialTransition(
@@ -114,6 +117,7 @@ public class GamePane extends VBox {
         );
         mainAnimation.setOnFinished((ActionEvent actionEvent) -> {
             shipControlls.resetControlls();
+            setStatuses(status);
             shipControlls.setDisable(false);
             endTurn.setDisable(false);
             timer = new Timer(endTurn);
@@ -283,5 +287,12 @@ public class GamePane extends VBox {
     public Thread getTimer(){
         return timer;
     }
-    
+
+    public Integer getShotCounter() {
+        return shotCounter;
+    }
+
+    public Integer getGrappleCounter() {
+        return grappleCounter;
+    }
 }

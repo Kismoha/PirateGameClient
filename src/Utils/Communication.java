@@ -9,7 +9,6 @@ import GUI.GamePane;
 import GUI.ShipControlls;
 import GUI.StartingPane;
 import Utils.Enums.MessageType;
-import Utils.MinGame;
 import static Utils.ScreenInfo.windowHeight;
 import static Utils.ScreenInfo.windowWidth;
 import java.io.BufferedReader;
@@ -17,13 +16,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Optional;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Toggle;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -51,7 +48,7 @@ public class Communication {
         try {
             tempIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
             tempOut = new PrintWriter(client.getOutputStream());
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Fail a streamek létrehozásakor");
 
         } finally {
@@ -69,13 +66,10 @@ public class Communication {
     }
 
     public void writeToServer(String message) {
-        try {
-            System.out.println("Writing message:" + message);
-            out.println(message);
-            out.flush();
-        } catch (Exception e) {
+        System.out.println("Writing message:" + message);
+        out.println(message);
+        out.flush();
 
-        }
     }
 
     public String genOptionsMessage(boolean fog, boolean maneuver, boolean pickup) {
@@ -100,6 +94,28 @@ public class Communication {
         return MessageType.GAMESTATE.toString() + ":" + sb.toString();
     }
 
+    private void showServerCommAlert() {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("ERROR");
+        alert.setHeaderText("Kommunikációs probléma");
+        alert.setContentText("A kliens nem tudok kommunikációt "
+                + "véghez vinni a szerverrel!");
+
+        alert.showAndWait();
+        Platform.exit();
+    }
+
+    private void showPlayerLeftAlert() {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("ERROR");
+        alert.setHeaderText("Csatlakozási probléma");
+        alert.setContentText("A szerver levesztette a "
+                + "kapcsolatot a másik játékossal");
+
+        alert.showAndWait();
+        Platform.exit();
+    }
+
     public void readFromServer() {
         //Ezt a Thread-et ki kéne vinni egy class-ba
         (new Thread() {
@@ -111,7 +127,9 @@ public class Communication {
                     message = in.readLine();
                     System.out.println("Message Beolvasva: " + message);
                 } catch (IOException e) {
-                    Platform.exit();
+                    Platform.runLater(() -> {
+                        showServerCommAlert();
+                    });
                 }
                 processMessage(message);
             }
@@ -125,37 +143,21 @@ public class Communication {
                         firstGameStateHandler(messageParts[1]);
                         break;
                     case GAMESTATE:
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                gamePane.animateTurn(messageParts[1]);
-                            }
+                        Platform.runLater(() -> {
+                            gamePane.animateTurn(messageParts[1],messageParts[2]);
                         });
                         break;
                     case STARTGAME:
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                primaryStage.setScene(new Scene(gamePane, windowWidth - 50, windowHeight - 50));
-                                Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
-                                primaryStage.setX((screenBounds.getWidth() - windowWidth) / 2);
-                                primaryStage.setY((screenBounds.getHeight() - windowHeight) / 2 + 20);
-
-                            }
+                        Platform.runLater(() -> {
+                            primaryStage.setScene(new Scene(gamePane, windowWidth - 50, windowHeight - 50));
+                            Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+                            primaryStage.setX((screenBounds.getWidth() - windowWidth) / 2);
+                            primaryStage.setY((screenBounds.getHeight() - windowHeight) / 2 + 20);
                         });
                         break;
                     case ERROR:
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                Alert alert = new Alert(AlertType.ERROR);
-                                alert.setTitle("ERROR");
-                                alert.setHeaderText("Csatlakozási probléma");
-                                alert.setContentText("A szerver levesztette a "
-                                        + "kapcsolatot a másik játékossal");
-
-                                alert.showAndWait();
-                            }
+                        Platform.runLater(() -> {
+                            showPlayerLeftAlert();
                         });
                         break;
                 }
@@ -167,11 +169,8 @@ public class Communication {
                 System.out.println(minGame.toString());
                 gamePane.setupTiles(minGame);
                 gamePane.setupShips(minGame, Integer.parseInt(parts[1]));
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        startingPane.getStartBTN().setDisable(false);
-                    }
+                Platform.runLater(() -> {
+                    startingPane.getStartBTN().setDisable(false);
                 });
             }
         }).start();

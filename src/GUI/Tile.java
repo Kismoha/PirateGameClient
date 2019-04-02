@@ -32,8 +32,7 @@ public class Tile extends ImageView {
                 setImage("water_75x75");
                 break;
             case ROCK:
-                int rnd = new Random().nextInt(3) + 1;
-                setImage("rocks_v" + rnd);
+                setImage("rocks_v1");
                 break;
             case CURRENT_NORTH:
                 setImage("whirlforward");
