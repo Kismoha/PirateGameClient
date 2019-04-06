@@ -17,17 +17,12 @@ import javafx.scene.text.Text;
  */
 public class StartingPane extends GridPane {
 
-    public static final int START_PAGE_HEIGHT = 125;
-    public static final int START_PAGE_WIDTH = 210;
+    public static final int START_PAGE_HEIGHT = 100;
+    public static final int START_PAGE_WIDTH = 350;
 
     private final Button startBTN = new Button("Start");
     private final Button exitBTN = new Button("Exit");
-    private final Text fogLabel = new Text("Köd");
-    private final Text maneuverLabel = new Text("Manöverek");
-    private final Text pickupLabel = new Text("Pick-up");
-    private final CheckBox fogCB = new CheckBox();
-    private final CheckBox maneuverCB = new CheckBox();
-    private final CheckBox pickupCB = new CheckBox();
+    private final Text status = new Text("Nyomjon a Ready-re ha készen áll");
     private final Button next = new Button("Next");
 
     public StartingPane() {
@@ -35,15 +30,10 @@ public class StartingPane extends GridPane {
         this.setPadding(new Insets(10, 10, 10, 10));
         this.setVgap(10);
         this.setHgap(10);
-        this.add(fogLabel, 1, 0);
-        this.add(fogCB, 2, 0);
-        this.add(maneuverLabel, 1, 1);
-        this.add(maneuverCB, 2, 1);
-        this.add(pickupLabel, 1, 2);
-        this.add(pickupCB, 2, 2);
-        this.add(startBTN, 0, 3);
-        this.add(next, 2, 3);
-        this.add(exitBTN, 3, 3);
+        this.add(status, 1, 0);
+        this.add(startBTN, 0, 1);
+        this.add(next, 1, 1);
+        this.add(exitBTN, 2, 1);
         startBTN.setDisable(true);
     }
 
@@ -55,16 +45,8 @@ public class StartingPane extends GridPane {
         return exitBTN;
     }
 
-    public CheckBox getFogCB() {
-        return fogCB;
-    }
-
-    public CheckBox getManeuverCB() {
-        return maneuverCB;
-    }
-
-    public CheckBox getPickupCB() {
-        return pickupCB;
+    public Text getStatus() {
+        return status;
     }
 
     public Button getNext() {

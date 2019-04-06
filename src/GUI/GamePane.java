@@ -31,7 +31,7 @@ import javafx.scene.text.Text;
  */
 public class GamePane extends VBox {
 
-    public static final int TURN_TIMER = 30;
+    public static final int TURN_TIMER = 90;
 
     private ScrollPane gameTable;
     private final StackPane gameState;

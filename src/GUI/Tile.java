@@ -7,13 +7,8 @@ package GUI;
 
 import Utils.Enums.TileType;
 import java.net.URISyntaxException;
-import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 /**
  *
@@ -21,7 +16,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class Tile extends ImageView {
 
-    public static final int TILE_SIZE = 75;
+    public static final int TILE_SIZE = 40;
 
     public Tile(TileType type, int x, int y) {
         this.relocate(x * TILE_SIZE, y * TILE_SIZE);
@@ -56,7 +51,7 @@ public class Tile extends ImageView {
     private void setImage(String imageName) {
         Image img = null;
         try {
-            img = new Image(getClass().getResource("/resources/" + imageName + ".jpg").toURI().toString());
+            img = new Image(getClass().getResource("/resources/" + imageName + ".jpg").toURI().toString(),TILE_SIZE,TILE_SIZE,false,false);
         } catch (URISyntaxException ex) {
             System.out.println("ImageView error");
         }

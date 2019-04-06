@@ -72,14 +72,6 @@ public class Communication {
 
     }
 
-    public String genOptionsMessage(boolean fog, boolean maneuver, boolean pickup) {
-        String message = "";
-        message += fog ? "1;" : "0;";
-        message += maneuver ? "1;" : "0;";
-        message += pickup ? "1" : "0";
-        return MessageType.OPTION.toString() + ":" + message;
-    }
-
     public String genTurnMessage() {
         StringBuilder sb = new StringBuilder("");
         ShipControlls sp = gamePane.getShipControlls();
@@ -137,8 +129,6 @@ public class Communication {
             private void processMessage(String message) {
                 String[] messageParts = message.split(":");
                 switch (MessageType.valueOf(messageParts[0])) {
-                    case OPTION:
-                        break;
                     case FIRST_GAMESTATE:
                         firstGameStateHandler(messageParts[1]);
                         break;
@@ -171,6 +161,7 @@ public class Communication {
                 gamePane.setupShips(minGame, Integer.parseInt(parts[1]));
                 Platform.runLater(() -> {
                     startingPane.getStartBTN().setDisable(false);
+                    startingPane.getStatus().setText("Nyomjon a Start-ra, ha készen áll");
                 });
             }
         }).start();

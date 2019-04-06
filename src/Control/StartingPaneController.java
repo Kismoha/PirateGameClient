@@ -22,6 +22,7 @@ public class StartingPaneController {
         //Game start mechanic
         startingPane.getStartBTN().setOnAction((ActionEvent actionEvent) -> {
             startingPane.getStartBTN().setDisable(true);
+            startingPane.getStatus().setText("Várakozás a másik félre");
             model.writeToServer("READY:IM_READY");
             model.readFromServer();
         });
@@ -33,10 +34,9 @@ public class StartingPaneController {
         
         startingPane.getNext().setOnAction((ActionEvent actionEvent) -> {
             startingPane.getNext().setDisable(true);
-            boolean fog = startingPane.getFogCB().isSelected();
-            boolean maneuver = startingPane.getManeuverCB().isSelected();;
-            boolean pickup = startingPane.getPickupCB().isSelected();
-            model.writeToServer(model.genOptionsMessage(fog, maneuver, pickup));
+            startingPane.getStatus().setText("Pálya legenerálása és várakozás a "
+                    + "másik félre");
+            model.writeToServer("SIGN:SEND MAP PLEASEEE");
             model.readFromServer();
         });
 
