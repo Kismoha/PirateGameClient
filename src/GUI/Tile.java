@@ -24,25 +24,25 @@ public class Tile extends ImageView {
         Image img = null;
         switch (type) {
             case WATER:
-                setImage("water_75x75");
+                setImage("sea_3.png");
                 break;
             case ROCK:
-                setImage("rocks_v1");
+                setImage("rocks_v1.jpg");
                 break;
             case CURRENT_NORTH:
-                setImage("whirlforward");
+                setImage("whirlforward.jpg");
                 this.setRotate(180);
                 break;
             case CURRENT_EAST:
-                setImage("whirlforward");
+                setImage("whirlforward.jpg");
                 this.setRotate(90);
                 break;
             case CURRENT_SOUTH:
-                setImage("whirlforward");
+                setImage("whirlforward.jpg");
                 this.setRotate(0);
                 break;
             case CURRENT_WEST:
-                setImage("whirlforward");
+                setImage("whirlforward.jpg");
                 this.setRotate(270);
                 break;
         }
@@ -51,7 +51,7 @@ public class Tile extends ImageView {
     private void setImage(String imageName) {
         Image img = null;
         try {
-            img = new Image(getClass().getResource("/resources/" + imageName + ".jpg").toURI().toString(),TILE_SIZE,TILE_SIZE,false,false);
+            img = new Image(getClass().getResource("/resources/" + imageName).toURI().toString(),TILE_SIZE,TILE_SIZE,false,false);
         } catch (URISyntaxException ex) {
             System.out.println("ImageView error");
         }

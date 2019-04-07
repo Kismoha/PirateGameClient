@@ -24,7 +24,6 @@ import javafx.animation.Transition;
 import javafx.animation.TranslateTransition;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcTo;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Shape;
