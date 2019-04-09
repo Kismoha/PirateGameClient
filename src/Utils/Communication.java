@@ -95,6 +95,7 @@ public class Communication {
 
         alert.showAndWait();
         Platform.exit();
+        System.exit(0);
     }
 
     private void showPlayerLeftAlert() {
@@ -106,6 +107,7 @@ public class Communication {
 
         alert.showAndWait();
         Platform.exit();
+        System.exit(0);
     }
 
     public void readFromServer() {
@@ -135,6 +137,7 @@ public class Communication {
                     case GAMESTATE:
                         Platform.runLater(() -> {
                             gamePane.animateTurn(messageParts[1],messageParts[2]);
+                            gamePane.showEndScreen(messageParts[3]);
                         });
                         break;
                     case STARTGAME:

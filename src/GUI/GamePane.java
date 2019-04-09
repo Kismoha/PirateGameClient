@@ -23,6 +23,8 @@ import Utils.AnimationGenerator;
 import Utils.Enums.MovementType;
 import Utils.Timer;
 import javafx.animation.Transition;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
 import javafx.scene.text.Text;
 
 /**
@@ -48,7 +50,7 @@ public class GamePane extends VBox {
 
     private ShipShape shipOne;
     private ShipShape shipTwo;
-    
+
     private Timer timer;
 
     public GamePane(int windowWidth, int windowHeight) {
@@ -70,7 +72,7 @@ public class GamePane extends VBox {
         this.getChildren().add(gameTable);
         //Controlls
         setupControlls();
-        this.setAlignment(Pos.CENTER);     
+        this.setAlignment(Pos.CENTER);
         timer = new Timer(endTurn);
     }
 
@@ -98,12 +100,23 @@ public class GamePane extends VBox {
         shot.setText(shotCounter.toString());
         grapple.setText(grappleCounter.toString());
     }
-    
-    public void setStatuses(String message){
+
+    public void setStatuses(String message) {
         String[] parts = message.split(",");
         shotCounter = Integer.parseInt(parts[1]);
         grappleCounter = Integer.parseInt(parts[2]);
         updateCounters();
+    }
+
+    public void showEndScreen(String message) {
+        if (!message.equals("NOPE")) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("A játéknak vége");
+            alert.setHeaderText(message);
+            alert.showAndWait();
+            Platform.exit();
+            System.exit(0);
+        }
     }
 
     public void animateTurn(String message, String status) {
@@ -116,12 +129,12 @@ public class GamePane extends VBox {
                 mainAnimationElements[3]
         );
         mainAnimation.setOnFinished((ActionEvent actionEvent) -> {
-            shipControlls.resetControlls();
-            setStatuses(status);
-            shipControlls.setDisable(false);
-            endTurn.setDisable(false);
-            timer = new Timer(endTurn);
-            timer.start();
+                shipControlls.resetControlls();
+                setStatuses(status);
+                shipControlls.setDisable(false);
+                endTurn.setDisable(false);
+                timer = new Timer(endTurn);
+                timer.start();
         });
         mainAnimation.play();
     }
@@ -237,18 +250,18 @@ public class GamePane extends VBox {
         endTurn = new Button("End Turn");
         VBox actions = new VBox();
         HBox shots = new HBox();
-        shots.getChildren().addAll(new Text("Lövések:"),shot);
+        shots.getChildren().addAll(new Text("Lövések:"), shot);
         HBox grapples = new HBox();
-        grapples.getChildren().addAll(new Text("Csáklyázások:"),grapple);
-        actions.getChildren().addAll(shots,grapples);
-        this.getChildren().add(new HBox(shipControlls, endTurn,actions));
+        grapples.getChildren().addAll(new Text("Csáklyázások:"), grapple);
+        actions.getChildren().addAll(shots, grapples);
+        this.getChildren().add(new HBox(shipControlls, endTurn, actions));
     }
-    
-    private void stopTimer(){
+
+    private void stopTimer() {
         timer.interrupt();
     }
-    
-    private void startTimer(){
+
+    private void startTimer() {
         timer.start();
     }
 
@@ -284,7 +297,7 @@ public class GamePane extends VBox {
         this.endTurn = endTurn;
     }
 
-    public Thread getTimer(){
+    public Thread getTimer() {
         return timer;
     }
 
