@@ -40,10 +40,10 @@ public class ShipControlls extends GridPane {
     }
 
     private void prepareImages() {
-        none=setImage("whirl_v1.jpg");
-        forward=setImage("forward_75x75.jpg");
-        right=setImage("right_75x75_v4.jpg");
-        left=setImage("left_75x75_v3.jpg");
+        none=setImage("no_moves.png");
+        forward=setImage("forward_75x75_v3.jpg");
+        right=setImage("arrow_right_final.png");
+        left=setImage("arrow_left_final.png");
     }
 
     private Image setImage(String imageName) {

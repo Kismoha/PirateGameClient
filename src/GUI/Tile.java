@@ -27,22 +27,22 @@ public class Tile extends ImageView {
                 setImage("sea_3.png");
                 break;
             case ROCK:
-                setImage("rocks_v1.jpg");
+                setImage("rocks_newsea_3.png");
                 break;
             case CURRENT_NORTH:
-                setImage("whirlforward.jpg");
+                setImage("whirlforward_sea3.png");
                 this.setRotate(0);
                 break;
             case CURRENT_EAST:
-                setImage("whirlforward.jpg");
+                setImage("whirlforward_sea3.png");
                 this.setRotate(90);
                 break;
             case CURRENT_SOUTH:
-                setImage("whirlforward.jpg");
+                setImage("whirlforward_sea3.png");
                 this.setRotate(180);
                 break;
             case CURRENT_WEST:
-                setImage("whirlforward.jpg");
+                setImage("whirlforward_sea3.png");
                 this.setRotate(270);
                 break;
         }
