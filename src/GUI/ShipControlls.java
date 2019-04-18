@@ -6,14 +6,14 @@
 package GUI;
 
 import Utils.Enums.MovementType;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 /**
  *
@@ -24,22 +24,46 @@ public class ShipControlls extends GridPane {
     public static final int MOVEMENT_FIELD_SIZE = 35;
     public static final int MOVEMENT_COUNT = 4;
 
-    ArrayList<Rectangle> movementSlots = new ArrayList(); //SIZE: MOVEMENT_COUNT
+    public static Image none;
+    public static Image forward;
+    public static Image left;
+    public static Image right;
+
+    ArrayList<ImageView> movementSlots = new ArrayList(); //SIZE: MOVEMENT_COUNT
     ArrayList<ToggleGroup> toggleGroups = new ArrayList(); //SIZE: MOVEMENT_COUNT*2
     ArrayList<RadioButton> radioButtons = new ArrayList(); //SIZE: MOVEMENT_COUNT*2*2
 
     public ShipControlls() {
+        prepareImages();
         prepareFields();
         addElements();
+    }
+
+    private void prepareImages() {
+        none=setImage("whirl_v1.jpg");
+        forward=setImage("forward_75x75.jpg");
+        right=setImage("right_75x75_v4.jpg");
+        left=setImage("left_75x75_v3.jpg");
+    }
+
+    private Image setImage(String imageName) {
+        Image img = null;
+        try {
+            img = new Image(getClass()
+                    .getResource("/resources/" + imageName)
+                    .toURI().toString(),
+                    MOVEMENT_FIELD_SIZE, MOVEMENT_FIELD_SIZE,
+                    false, false);
+        } catch (URISyntaxException ex) {
+            System.out.println("ImageView error");
+        }
+        return img;
     }
 
     private void prepareFields() {
         //mopvement fields and statuses
         for (int i = 0; i < MOVEMENT_COUNT; i++) {
-            Rectangle temp = new Rectangle();
-            temp.setHeight(MOVEMENT_FIELD_SIZE);
-            temp.setWidth(MOVEMENT_FIELD_SIZE);
-            temp.setFill(Color.GRAY);
+            ImageView temp = new ImageView(none);
             temp.setUserData(MovementType.NONE);
             movementSlots.add(temp);
         }
@@ -70,10 +94,10 @@ public class ShipControlls extends GridPane {
     }
 
     public void resetControlls() {
-        for (Iterator<Rectangle> it = movementSlots.iterator(); it.hasNext();) {
-            Rectangle rect = it.next();
-            rect.setFill(Color.GRAY);
-            rect.setUserData(MovementType.NONE);
+        for (Iterator<ImageView> it = movementSlots.iterator(); it.hasNext();) {
+            ImageView iv = it.next();
+            iv.setImage(none);
+            iv.setUserData(MovementType.NONE);
         }
         for (Iterator<RadioButton> it = radioButtons.iterator(); it.hasNext();) {
             RadioButton rb = it.next();
@@ -81,11 +105,11 @@ public class ShipControlls extends GridPane {
         }
     }
 
-    public ArrayList<Rectangle> getMovementSlots() {
+    public ArrayList<ImageView> getMovementSlots() {
         return movementSlots;
     }
 
-    public void setMovementSlots(ArrayList<Rectangle> movementSlots) {
+    public void setMovementSlots(ArrayList<ImageView> movementSlots) {
         this.movementSlots = movementSlots;
     }
 

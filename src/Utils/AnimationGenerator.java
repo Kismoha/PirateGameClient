@@ -147,8 +147,6 @@ public class AnimationGenerator {
 
     public ParallelTransition actionAnimations(String left,
             String right, ShipShape ship) {
-        String[] leftParts = left.split(",");
-        String[] rightParts = right.split(",");
         return new ParallelTransition(
                 singleAction(ship, left, true),
                 singleAction(ship, right, false)
@@ -177,7 +175,7 @@ public class AnimationGenerator {
                 );
                 break;
             case GRAPPLE:
-                target = isLeft ? ship.getLeftGrapple() : ship.getRightGrapple();
+                //target = isLeft ? ship.getLeftGrapple() : ship.getRightGrapple();
                 break;
             case NONE:
                 break;

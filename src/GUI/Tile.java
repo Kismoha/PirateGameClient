@@ -31,7 +31,7 @@ public class Tile extends ImageView {
                 break;
             case CURRENT_NORTH:
                 setImage("whirlforward.jpg");
-                this.setRotate(180);
+                this.setRotate(0);
                 break;
             case CURRENT_EAST:
                 setImage("whirlforward.jpg");
@@ -39,7 +39,7 @@ public class Tile extends ImageView {
                 break;
             case CURRENT_SOUTH:
                 setImage("whirlforward.jpg");
-                this.setRotate(0);
+                this.setRotate(180);
                 break;
             case CURRENT_WEST:
                 setImage("whirlforward.jpg");
