@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  */
 public class PirateGameClient extends Application {
 
-    private Socket me;
+    public static Socket me;
     //Pane of the game UI
     private GamePane gamePane;
     //Pane of the starting UI
@@ -40,12 +40,6 @@ public class PirateGameClient extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        //Connecting
-        try {
-            me = new Socket("localhost",65535);
-        } catch (IOException ex) {
-            Logger.getLogger(PirateGameClient.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
         //Sizing the stage to the resolution
         primaryStage.setMaxWidth(windowWidth);
@@ -64,8 +58,9 @@ public class PirateGameClient extends Application {
         //setting up startingPane UI controller
         
         comms = new Communication(me,gamePane,startingPane,primaryStage);
+        
         //Setting up startingPane controller
-        new StartingPaneController(comms, primaryStage, startingPane, gameScene);
+        new StartingPaneController(comms, primaryStage, gamePane, startingPane, gameScene, this);
         //setting up ship controlls controller
         new ShipControllsController(comms,gamePane);
 
@@ -80,6 +75,10 @@ public class PirateGameClient extends Application {
        
     }
  
+    public void connect(String ip) throws IOException{
+        me = new Socket(ip,65535);
+    }
+    
     /**
      * @param args the command line arguments
      */

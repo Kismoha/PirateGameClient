@@ -8,6 +8,7 @@ package Utils;
 import GUI.GamePane;
 import GUI.ShipControlls;
 import GUI.StartingPane;
+import Main.PirateGameClient;
 import Utils.Enums.MessageType;
 import static Utils.ScreenInfo.windowHeight;
 import static Utils.ScreenInfo.windowWidth;
@@ -31,21 +32,27 @@ import javafx.stage.Stage;
  */
 public class Communication {
 
-    private final Socket client;
+    private Socket client;
     private final GamePane gamePane;
     private final StartingPane startingPane;
     private final Stage primaryStage;
-    private final BufferedReader in;
-    private final PrintWriter out;
+    private BufferedReader in;
+    private PrintWriter out;
 
     public Communication(Socket client, GamePane gamePane, StartingPane startingPane, Stage stage) {
-        this.client = client;
+        this.client = PirateGameClient.me;
         this.gamePane = gamePane;
         this.startingPane = startingPane;
         this.primaryStage = stage;
+        
+        
+    }
+
+    public void createStreams(){
         BufferedReader tempIn = BRMagicTrick();
         PrintWriter tempOut = PWMagicTrick();
         try {
+            client = PirateGameClient.me;
             tempIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
             tempOut = new PrintWriter(client.getOutputStream());
         } catch (IOException e) {
@@ -56,7 +63,7 @@ public class Communication {
             this.out = tempOut;
         }
     }
-
+    
     private PrintWriter PWMagicTrick() {
         return null;
     }

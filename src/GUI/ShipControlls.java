@@ -29,9 +29,9 @@ public class ShipControlls extends GridPane {
     public static Image left;
     public static Image right;
 
-    private ArrayList<ImageView> movementSlots = new ArrayList(); //SIZE: MOVEMENT_COUNT
-    private ArrayList<ToggleGroup> toggleGroups = new ArrayList(); //SIZE: MOVEMENT_COUNT*2
-    private ArrayList<RadioButton> radioButtons = new ArrayList(); //SIZE: MOVEMENT_COUNT*2*2
+    private final ArrayList<ImageView> movementSlots = new ArrayList(); //SIZE: MOVEMENT_COUNT
+    private final ArrayList<ToggleGroup> toggleGroups = new ArrayList(); //SIZE: MOVEMENT_COUNT*2
+    private final ArrayList<RadioButton> radioButtons = new ArrayList(); //SIZE: MOVEMENT_COUNT*2*2
 
     public ShipControlls() {
         prepareImages();
@@ -94,15 +94,15 @@ public class ShipControlls extends GridPane {
     }
 
     public void resetControlls() {
-        for (Iterator<ImageView> it = movementSlots.iterator(); it.hasNext();) {
-            ImageView iv = it.next();
+        movementSlots.stream().map((iv) -> {
             iv.setImage(none);
+            return iv;
+        }).forEachOrdered((iv) -> {
             iv.setUserData(MovementType.NONE);
-        }
-        for (Iterator<RadioButton> it = radioButtons.iterator(); it.hasNext();) {
-            RadioButton rb = it.next();
+        });
+        radioButtons.forEach((rb) -> {
             rb.setSelected(false);
-        }
+        });
     }
 
     public ArrayList<ImageView> getMovementSlots() {

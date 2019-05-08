@@ -8,6 +8,7 @@ package GUI;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 
@@ -18,12 +19,13 @@ import javafx.scene.text.Text;
 public class StartingPane extends GridPane {
 
     public static final int START_PAGE_HEIGHT = 100;
-    public static final int START_PAGE_WIDTH = 350;
+    public static final int START_PAGE_WIDTH = 450;
 
     private final Button startBTN = new Button("Start");
     private final Button exitBTN = new Button("Exit");
-    private final Text status = new Text("Nyomjon a Next-re ha készen áll");
+    private final Text status = new Text("Írja be a szerver IP-t és nyomjon a Next-re ha készen áll");
     private final Button next = new Button("Next");
+    private final TextField ip = new TextField();
 
     public StartingPane() {
         this.setPrefSize(START_PAGE_WIDTH, START_PAGE_HEIGHT);
@@ -39,6 +41,8 @@ public class StartingPane extends GridPane {
         this.add(startBTN, 0, 1);
         this.add(next, 1, 1);
         this.add(exitBTN, 2, 1);
+        this.add(new Text("IP:"),0,2);
+        this.add(ip,1,2);
     }
 
     public Button getStartBTN() {
@@ -55,6 +59,9 @@ public class StartingPane extends GridPane {
 
     public Button getNext() {
         return next;
+    }
+    public TextField getIp() {
+        return ip;
     }
 
 }

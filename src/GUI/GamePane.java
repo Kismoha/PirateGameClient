@@ -33,7 +33,7 @@ import javafx.scene.text.Text;
  */
 public class GamePane extends VBox {
 
-    public static final int TURN_TIMER = 10;
+    public static final int TURN_TIMER = 60;
 
     private ScrollPane gameTable;
     private final StackPane gameState;
@@ -149,8 +149,6 @@ public class GamePane extends VBox {
 
         shipOne.addToPane(ships);
         shipTwo.addToPane(ships);
-
-        startTimer();
     }
 
     public void setupTiles(MinGame minGame) {
@@ -265,11 +263,11 @@ public class GamePane extends VBox {
         return shipSegmentAnimation;
     }
 
-    private void stopTimer() {
+    public void stopTimer() {
         timer.interrupt();
     }
 
-    private void startTimer() {
+    public void startTimer() {
         timer.start();
     }
 
