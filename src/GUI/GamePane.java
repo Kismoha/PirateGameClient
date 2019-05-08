@@ -33,7 +33,7 @@ import javafx.scene.text.Text;
  */
 public class GamePane extends VBox {
 
-    public static final int TURN_TIMER = 90;
+    public static final int TURN_TIMER = 10;
 
     private ScrollPane gameTable;
     private final StackPane gameState;
@@ -44,9 +44,11 @@ public class GamePane extends VBox {
 
     private Integer shotCounter;
     private Integer grappleCounter;
+    private Integer damageCounter;
 
     private final Text shot;
     private final Text grapple;
+    private final Text damage;
 
     private ShipShape shipOne;
     private ShipShape shipTwo;
@@ -56,9 +58,11 @@ public class GamePane extends VBox {
     public GamePane(int windowWidth, int windowHeight) {
         shotCounter = 6;
         grappleCounter = 4;
+        damageCounter = 0;
 
         shot = new Text(shotCounter.toString());
         grapple = new Text(grappleCounter.toString());
+        damage = new Text(damageCounter.toString()+"/6");
 
         gameTable = new ScrollPane();
         tiles = new Pane();
@@ -99,12 +103,14 @@ public class GamePane extends VBox {
     private void updateCounters() {
         shot.setText(shotCounter.toString());
         grapple.setText(grappleCounter.toString());
+        damage.setText(damageCounter.toString()+"/6");
     }
 
     public void setStatuses(String message) {
         String[] parts = message.split(",");
         shotCounter = Integer.parseInt(parts[1]);
         grappleCounter = Integer.parseInt(parts[2]);
+        damageCounter = Integer.parseInt(parts[0]);
         updateCounters();
     }
 
@@ -119,7 +125,61 @@ public class GamePane extends VBox {
         }
     }
 
-    public void animateTurn(String message, String status) {
+    public void setupShips(MinGame minGame, int self) {
+        if (self == 1) {
+            shipOne = new ShipShape(minGame.getpOneCurrentPosX(),
+                    minGame.getpOneCurrentPosY(), Color.YELLOW,
+                    minGame.getPOneDir());
+
+            shipTwo = new ShipShape(minGame.getpTwoCurrentPosX(),
+                    minGame.getpTwoCurrentPosY(), Color.RED,
+                    minGame.getPTwoDir());
+        } else {
+            shipOne = new ShipShape(minGame.getpOneCurrentPosX(),
+                    minGame.getpOneCurrentPosY(), Color.RED,
+                    minGame.getPOneDir());
+
+            shipTwo = new ShipShape(minGame.getpTwoCurrentPosX(),
+                    minGame.getpTwoCurrentPosY(), Color.YELLOW,
+                    minGame.getPTwoDir());
+        }
+
+        ships.getChildren().add(shipOne.getShip());
+        ships.getChildren().add(shipTwo.getShip());
+
+        shipOne.addToPane(ships);
+        shipTwo.addToPane(ships);
+
+        startTimer();
+    }
+
+    public void setupTiles(MinGame minGame) {
+        //init
+        TileType[][] map = minGame.getMap();
+        //populating game map
+        for (int i = 0; i < minGame.getMAP_HEIGHT(); i++) {
+            for (int j = 0; j < minGame.getMAP_WIDTH(); j++) {
+                Tile tile = new Tile(map[i][j], i, j);
+                tiles.getChildren().add(tile);
+            }
+        }
+    }
+
+    private void setupControlls() {
+        shipControlls = new ShipControlls();
+        endTurn = new Button("End Turn");
+        VBox actions = new VBox();
+        HBox shots = new HBox();
+        shots.getChildren().addAll(new Text("Lövések:"), shot);
+        HBox grapples = new HBox();
+        grapples.getChildren().addAll(new Text("Csáklyázások:"), grapple);
+        HBox damages = new HBox();
+        damages.getChildren().addAll(new Text("Sérülés:"), damage);
+        actions.getChildren().addAll(shots, grapples,damages);
+        this.getChildren().add(new HBox(shipControlls, endTurn, actions));
+    }
+    
+     public void animateTurn(String message, String status) {
         ParallelTransition[] mainAnimationElements = new ParallelTransition[4];
         calcSegmentAnimations(mainAnimationElements, message);
         SequentialTransition mainAnimation = new SequentialTransition(
@@ -203,58 +263,6 @@ public class GamePane extends VBox {
                 );
 
         return shipSegmentAnimation;
-    }
-
-    public void setupShips(MinGame minGame, int self) {
-        if (self == 1) {
-            shipOne = new ShipShape(minGame.getpOneCurrentPosX(),
-                    minGame.getpOneCurrentPosY(), Color.YELLOW,
-                    minGame.getPOneDir());
-
-            shipTwo = new ShipShape(minGame.getpTwoCurrentPosX(),
-                    minGame.getpTwoCurrentPosY(), Color.RED,
-                    minGame.getPTwoDir());
-        } else {
-            shipOne = new ShipShape(minGame.getpOneCurrentPosX(),
-                    minGame.getpOneCurrentPosY(), Color.RED,
-                    minGame.getPOneDir());
-
-            shipTwo = new ShipShape(minGame.getpTwoCurrentPosX(),
-                    minGame.getpTwoCurrentPosY(), Color.YELLOW,
-                    minGame.getPTwoDir());
-        }
-
-        ships.getChildren().add(shipOne.getShip());
-        ships.getChildren().add(shipTwo.getShip());
-
-        shipOne.addToPane(ships);
-        shipTwo.addToPane(ships);
-
-        startTimer();
-    }
-
-    public void setupTiles(MinGame minGame) {
-        //init
-        TileType[][] map = minGame.getMap();
-        //populating game map
-        for (int i = 0; i < minGame.getMAP_HEIGHT(); i++) {
-            for (int j = 0; j < minGame.getMAP_WIDTH(); j++) {
-                Tile tile = new Tile(map[i][j], i, j);
-                tiles.getChildren().add(tile);
-            }
-        }
-    }
-
-    private void setupControlls() {
-        shipControlls = new ShipControlls();
-        endTurn = new Button("End Turn");
-        VBox actions = new VBox();
-        HBox shots = new HBox();
-        shots.getChildren().addAll(new Text("Lövések:"), shot);
-        HBox grapples = new HBox();
-        grapples.getChildren().addAll(new Text("Csáklyázások:"), grapple);
-        actions.getChildren().addAll(shots, grapples);
-        this.getChildren().add(new HBox(shipControlls, endTurn, actions));
     }
 
     private void stopTimer() {

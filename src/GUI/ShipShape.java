@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 import static GUI.Tile.TILE_SIZE;
+import java.net.URISyntaxException;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -40,13 +41,14 @@ public class ShipShape {
         this.posX = x;
         this.posY = y;
         this.dir = dir;
+        
         ship = new ImageView();
         try {
             ship.setImage(color == Color.YELLOW
                     ? new Image(getClass().getResource("/resources/ships.png").toURI().toString(), TILE_SIZE, TILE_SIZE, false, false)
                     : new Image(getClass().getResource("/resources/enemy_ship_black_red.png").toURI().toString(), TILE_SIZE, TILE_SIZE, false, false));
-        } catch (Exception e) {
-
+        } catch (URISyntaxException e) {
+            System.out.println("ImageView error");
         }
 
         leftShot = new Circle(5, Color.BLACK);

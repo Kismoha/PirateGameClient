@@ -49,7 +49,7 @@ public class Communication {
             tempIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
             tempOut = new PrintWriter(client.getOutputStream());
         } catch (IOException e) {
-            System.out.println("Fail a streamek létrehozásakor");
+            System.out.println("Hiba a streamek létrehozásakor");
 
         } finally {
             this.in = tempIn;

@@ -65,7 +65,7 @@ public class ShipControllsController {
         for (Iterator<RadioButton> it = gamePane.getShipControlls().getRadioButtons().iterator(); it.hasNext();) {
             RadioButton button = it.next();
             button.setOnMouseClicked((MouseEvent mouseEvent) -> {
-                if (mouseEvent.isSecondaryButtonDown()) {
+                if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                     button.setSelected(false);
                 }
             });

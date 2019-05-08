@@ -28,8 +28,6 @@ public class MinGame {
     private String pOneDir;
     private String pTwoDir;
 
-    private Socket winner;
-
     public MinGame(String game) {
         String[] mainSplit = game.split("-");
         String[] mapSizes = mainSplit[0].split(";");
@@ -112,14 +110,6 @@ public class MinGame {
 
     public void setMAP_WIDTH(int MAP_WIDTH) {
         this.MAP_WIDTH = MAP_WIDTH;
-    }
-
-    public Socket getWinner() {
-        return winner;
-    }
-
-    public void setWinner(Socket winner) {
-        this.winner = winner;
     }
 
     public String getPOneDir() {

@@ -20,8 +20,7 @@ public class Tile extends ImageView {
 
     public Tile(TileType type, int x, int y) {
         this.relocate(x * TILE_SIZE, y * TILE_SIZE);
-
-        Image img = null;
+        
         switch (type) {
             case WATER:
                 setImage("sea_3.png");

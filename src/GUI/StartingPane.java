@@ -22,7 +22,7 @@ public class StartingPane extends GridPane {
 
     private final Button startBTN = new Button("Start");
     private final Button exitBTN = new Button("Exit");
-    private final Text status = new Text("Nyomjon a Ready-re ha készen áll");
+    private final Text status = new Text("Nyomjon a Next-re ha készen áll");
     private final Button next = new Button("Next");
 
     public StartingPane() {
@@ -30,11 +30,15 @@ public class StartingPane extends GridPane {
         this.setPadding(new Insets(10, 10, 10, 10));
         this.setVgap(10);
         this.setHgap(10);
+        addAssets();
+        startBTN.setDisable(true);
+    }
+    
+    private void addAssets(){
         this.add(status, 1, 0);
         this.add(startBTN, 0, 1);
         this.add(next, 1, 1);
         this.add(exitBTN, 2, 1);
-        startBTN.setDisable(true);
     }
 
     public Button getStartBTN() {
